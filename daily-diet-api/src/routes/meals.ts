@@ -162,9 +162,7 @@ export async function mealsRoutes(app: FastifyInstance) {
       if (meal.is_on_the_diet) {
         counter++
       } else {
-        if (counter > 0) {
-          mealsOnTheDiet.push(counter)
-        }
+        mealsOnTheDiet.push(counter)
         counter = 0
       }
     }
