@@ -47,12 +47,12 @@ export async function authRoutes(app: FastifyInstance) {
     const user = await knex('users').where('email', email).first()
 
     if (!user) {
-      return reply.status(404).send()
+      return reply.status(401).send()
     }
 
     const hashedPass = encryptText(password, user.salt)
     if (hashedPass !== user.hash) {
-      return reply.status(404).send()
+      return reply.status(401).send()
     }
 
     setUserCookie(reply, user.id)
@@ -61,7 +61,7 @@ export async function authRoutes(app: FastifyInstance) {
   })
 
   app.post('/logout', async (request, reply) => {
-    const loggedUserId = request.cookies.userId
+    const { userId: loggedUserId } = request.cookies
 
     if (loggedUserId) {
       reply.clearCookie('userId')
